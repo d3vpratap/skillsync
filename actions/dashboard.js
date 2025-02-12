@@ -8,7 +8,8 @@ const model = genAI.getGenerativeModel({
   model: "gemini-1.5-flash",
 });
 export const generateIndustryAIInsights = async (industry) => {
-  const prompt = `
+  try{
+const prompt = `
           Analyze the current state of the ${industry} industry and provide insights in ONLY the following JSON format without any additional notes or explanations:
           {
             "salaryRanges": [
@@ -27,12 +28,18 @@ export const generateIndustryAIInsights = async (industry) => {
           Growth rate should be a percentage.
           Include at least 5 skills and trends.
         `;
-  const result = await model.generateContent(prompt);
-  const response = result.response;
-  const text = response.text();
-
-  const cleanText = text.replace(/```(?:json)?\n?/g, "").trim();
-  return JSON.parse(cleanText);
+const result = await model.generateContent(prompt);
+const response = result.response;
+const text = response.text();
+const cleanText = text.replace(/```(?:json)?\n?/g, "").trim();
+// console.log(JSON.parse(cleanText));
+console.log("Generated insights");
+return JSON.parse(cleanText);
+  }
+  catch(error){
+console.log("not generated")
+  }
+  
 };
 
 export async function getIndustryInsights() {
@@ -40,21 +47,28 @@ export async function getIndustryInsights() {
   if (!userId) throw new Error("Unauthorized");
   const user = await db.user.findUnique({
     where: { clerkUserId: userId },
-    include:{
-        industryInsights:true
-    }
+    include: {
+      industryInsights: true,
+    },
   });
 
   if (!user) throw new Error("User not found");
+
   if (!user.industryInsights) {
-    const insights = await generateIndustryAIInsights(user.industry);
-    const industryInsight = await db.industryInsights.create({
-      data: {
-        industry: user.industry,
-        ...insights,
-        nextUpdate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-      },
-    });
+    try {
+      const insights = await generateIndustryAIInsights(user.industry);
+      const industryInsight = await db.industryInsights.create({
+        data: {
+          industry: user.industry,
+          ...insights,
+          nextUpdate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+        },
+      });
+      console.log(industryInsight);
+      return industryInsight;
+    } catch (error) {
+      console.log("error generating insights",error);
+    }
   }
   return user.industryInsights;
 }

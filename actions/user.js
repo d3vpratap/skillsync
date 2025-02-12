@@ -23,10 +23,12 @@ export async function updateUser(data) {
             industry: data.industry,
           },
         });
-
         // If industry doesn't exist, create it with default values
         if (!industryInsight) {
           const insights = await generateIndustryAIInsights(data.industry);
+          if(!insights){
+            console.log("not able to create insights user.js");
+          }
           industryInsight = await db.industryInsights.create({
             data: {
               industry: data.industry,
@@ -54,7 +56,7 @@ export async function updateUser(data) {
         timeout: 10000, // default: 5000
       }
     );
-    // revalidatePath("/");
+    revalidatePath("/");
     return { success: true, ...result };
   } catch (error) {
     console.error("Error updating user and industry:", error.message);
@@ -76,7 +78,7 @@ export async function getUserOnboardingStatus() {
     });
 
     return {
-      isOnboarded: !!user?.industry,
+      isOnboarded:!!user?.industry,
     };
   } catch (error) {
     console.error("Error checking onboarding status:", error.message);
