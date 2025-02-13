@@ -38,7 +38,7 @@ export default function QuizResult({
         <div className="space-y-4">
           <h3 className="font-medium">Question Review</h3>
           {result.questions.map((q, index) => (
-            <div key={index} className="border rounded-lg p-4 space-y-2">
+            <div key={index} className="border  p-4 space-y-2">
               <div className="flex items-start justify-between gap-2">
                 <p className="font-medium">{q.question}</p>
                 {q.isCorrect ? (
