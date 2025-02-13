@@ -70,7 +70,7 @@ export default function PerformanceChart({ assessments }) {
                   content={({ active, payload }) => {
                     if (active && payload?.length) {
                       return (
-                        <div className="bg-background border border-muted rounded-lg p-2 shadow-md">
+                        <div className="bg-background border border-muted p-2 shadow-md">
                           <p className="text-sm font-medium">
                             Score: {payload[0].value}%
                           </p>

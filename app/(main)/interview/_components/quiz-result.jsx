@@ -28,7 +28,7 @@ export default function QuizResult({
 
         {/* Improvement Tip */}
         {result.improvementTip && (
-          <div className="bg-muted p-4 rounded-lg">
+          <div className="bg-muted p-4 ">
             <p className="font-medium">Improvement Tip:</p>
             <p className="text-muted-foreground">{result.improvementTip}</p>
           </div>

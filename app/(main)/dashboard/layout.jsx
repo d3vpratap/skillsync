@@ -5,9 +5,9 @@ const Layout = ({ children }) => {
     <div className="px-5">
       <div className=" items-center justify-between mb-5">
         <h1 className="font-bold text-6xl gradient-title">Industry Insights</h1>
-        <Suspense fallback={<BarLoader className="mt-4" width={"100%"} />}>
+        {/* <Suspense fallback={<BarLoader className="mt-4" width={"100%"} />}> */}
           {children}
-        </Suspense>
+        {/* </Suspense> */}
       </div>
     </div>
   );
